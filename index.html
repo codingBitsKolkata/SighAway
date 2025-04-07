@@ -189,8 +189,8 @@
             const randomColorIndex = Math.floor(Math.random() * colors.length);
             
             currentColor = colors[randomColorIndex];
-            audioPlayer.src = `audio/${musicFiles[randomMusicIndex]}`;
-            audioPlayer.volume = 0.7;
+            audioPlayer.src = `${musicFiles[randomMusicIndex]}`;
+            audioPlayer.volume = 0.9;
             audioPlayer.loop = true;
             audioPlayer.play().catch(e => console.log("Playback error:", e));
             
