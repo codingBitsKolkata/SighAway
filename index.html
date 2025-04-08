@@ -389,6 +389,8 @@
             
             const trackNumber = Math.floor(Math.random() * 10) + 1;
 			currentAudio = new Audio(`track${trackNumber}.mp3`); // Modified path
+		alert("hi");
+		alert(trackNumber);
 			currentAudio.volume = isMuted ? 0 : volumeSlider.value;
 			currentAudio.loop = true;
 			currentAudio.play();
