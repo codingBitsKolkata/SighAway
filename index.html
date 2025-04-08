@@ -3,223 +3,437 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stress Buster</title>
+    <title>Sigh Away - Relaxation Timer</title>
     <style>
         body {
-            font-family: 'Arial', sans-serif;
             margin: 0;
-            padding: 0;
-            background: #f0f8ff;
-            color: #333;
-            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             min-height: 100vh;
-            transition: background 0.5s ease;
+            background: #1a1a1a;
+            font-family: 'Arial Rounded MT Bold', Arial, sans-serif;
+            transition: background 0.5s;
+            padding: 20px;
+            box-sizing: border-box;
             overflow: hidden;
         }
-        
-        .container {
-            max-width: 400px;
-            margin: 0 auto;
-            padding: 2rem;
-            position: relative;
+
+        .header {
+            text-align: center;
+            margin-bottom: 15px;
+            flex-shrink: 0;
         }
-        
-        #mainButton {
+
+        .title {
+            color: #fff;
+            font-size: 2.5em;
+            margin: 0;
+            letter-spacing: 2px;
+        }
+
+        .tagline {
+            color: rgba(255,255,255,0.8);
+            font-size: 1.2em;
+            margin-top: 5px;
+        }
+
+        .container {
+            text-align: center;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            padding: 15px 0;
+            gap: 10px;
+        }
+
+        .motivation-line {
+            font-size: 1.8em;
+            color: #fff;
+            min-height: 60px;
+            margin: 10px 0;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .main-button {
             width: 200px;
             height: 200px;
             border-radius: 50%;
             border: none;
-            background: #ff6b6b;
             color: white;
-            font-size: 1.5rem;
+            font-size: 1.2em;
             cursor: pointer;
-            box-shadow: 0 10px 25px rgba(255,107,107,0.4);
-            margin: 2rem auto;
-            transition: all 0.3s;
+            margin: 15px 0;
+            position: relative;
+            overflow: hidden;
+            z-index: 2;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            transform-style: preserve-3d;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2),
+                       inset 0 -8px 15px rgba(0,0,0,0.15),
+                       inset 0 8px 15px rgba(255,255,255,0.15);
         }
-        
-        #mainButton:active {
-            transform: scale(0.95);
+		.main-button:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 50%;
+            box-shadow: 0 -10px 20px rgba(255,255,255,0.1),
+                       inset 0 10px 20px rgba(255,255,255,0.1);
+            opacity: 0.5;
+            transition: all 0.3s ease;
         }
-        
-        .timer {
-            font-size: 2rem;
-            margin: 1rem 0;
-            color: #333;
+		.main-button:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.25),
+                       inset 0 -8px 15px rgba(0,0,0,0.15),
+                       inset 0 8px 15px rgba(255,255,255,0.15);
         }
-        
-        .share-section {
-            margin-top: 2rem;
-            display: none;
+
+        .main-button:active {
+            transform: translateY(4px) scale(0.98);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2),
+                       inset 0 -4px 10px rgba(0,0,0,0.1),
+                       inset 0 4px 10px rgba(255,255,255,0.1);
         }
-        
-        .share-btn {
+        .button-text {
+            position: relative;
+            z-index: 2;
+            pointer-events: none;
+            padding: 20px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+
+        .points {
+            font-size: 2.5em;
+            color: white;
+            margin: 15px 0;
+            font-family: monospace;
+            text-shadow: 0 0 10px rgba(255,255,255,0.5);
+            z-index: 2;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+		 .points.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .volume-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 15px 0;
+            z-index: 2;
+        }
+
+        .volume-slider {
+            width: 150px;
+            height: 5px;
+            -webkit-appearance: none;
+            background: rgba(255,255,255,0.2);
+            border-radius: 3px;
+        }
+
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 15px;
+            height: 15px;
+            background: #25D366;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .mute-button {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 1.2em;
+            padding: 5px;
+        }
+
+        .share-button {
+            padding: 12px 25px;
             background: #25D366;
             color: white;
             border: none;
-            padding: 0.8rem 1.5rem;
-            border-radius: 50px;
+            border-radius: 25px;
             cursor: pointer;
-            font-size: 1rem;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+            opacity: 0;
+            visibility: hidden;
+            z-index: 2;
         }
-        
-        .bg-animation {
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, transparent 20%, currentColor 20%, currentColor 80%, transparent 80%, transparent);
-            background-size: 50px 50px;
-            animation: bgPulse 10s linear infinite;
-            opacity: 0.1;
-            z-index: -1;
+
+        .share-button.visible {
+            opacity: 1;
+            visibility: visible;
         }
-        
-        @keyframes bgPulse {
-            0% { transform: scale(1) rotate(0deg); }
-            100% { transform: scale(1.5) rotate(180deg); }
+
+        .footer {
+            color: rgba(255,255,255,0.5);
+            font-size: 0.9em;
+            flex-shrink: 0;
+            margin-top: auto;
+            padding: 20px 0;
+            z-index: 2;
         }
+
+        .particle {
+            position: fixed;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes celebrate {
+            0% { transform: scale(1); text-shadow: 0 0 10px rgba(255,255,255,0.5); }
+            50% { transform: scale(1.2); text-shadow: 0 0 20px rgba(255,255,255,0.8); }
+            100% { transform: scale(1); text-shadow: 0 0 10px rgba(255,255,255,0.5); }
+        }
+
+        /* Previous animation keyframes remain same */
     </style>
 </head>
 <body>
-    <div class="bg-animation"></div>
-    
-    <div class="container">
-        <h1>Stress Buster</h1>
-        <p>Press and hold to relax</p>
-        
-        <div class="timer" id="timer">00:00</div>
-        
-        <button id="mainButton">Press & Hold</button>
-        
-        <div class="share-section" id="shareSection">
-            <button class="share-btn" id="shareBtn">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
-                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-                </svg>
-                Share My Score
-            </button>
-        </div>
+    <div class="header">
+        <h1 class="title">Sigh Away</h1>
+        <p class="tagline">Relaxation at Your Fingertips</p>
     </div>
 
-    <audio id="audioPlayer"></audio>
-    
+    <div class="container">
+        <div class="motivation-line">Ready to relax? Press and hold!</div>
+        <div class="points">0 Points</div>
+        <button class="main-button">
+            <div class="button-text">Press & Hold to Sigh Away</div>
+        </button>
+        
+        <div class="volume-controls">
+            <button class="mute-button" onclick="toggleMute()">🔊</button>
+            <input type="range" class="volume-slider" min="0" max="1" step="0.1" value="0.5">
+        </div>
+
+        <button class="share-button" onclick="shareScore()">Share on WhatsApp</button>
+    </div>
+
+    <div class="footer">Designed and Developed by Sigh Away</div>
+
     <script>
-        // DOM Elements
-        const mainButton = document.getElementById('mainButton');
-        const timerDisplay = document.getElementById('timer');
-        const shareSection = document.getElementById('shareSection');
-        const shareBtn = document.getElementById('shareBtn');
-        const audioPlayer = document.getElementById('audioPlayer');
-        const bgAnimation = document.querySelector('.bg-animation');
-        const body = document.body;
+        const motivationalPhrases = [
+            "Yes! Press and Hold!",
+            "Keep going, you're doing great!",
+            "Almost there, don't let go!",
+            "You've got this!",
+            "Breathe in, breathe out...",
+            "Feel the relaxation!",
+            "Amazing job! Keep holding!",
+            "You're crushing it!",
+            "Stay strong, keep pressing!",
+            "Mindfulness in progress!"
+        ];
+
+        const colors = [
+            '#2ecc71', '#3498db', '#9b59b6', '#e74c3c', '#f1c40f',
+            '#1abc9c', '#e67e22', '#34495e', '#7f8c8d', '#d35400'
+        ];
+        const animations = [
+            'raindrop', 'bubble', 'spiral', 'circle-expand', 'sparkle',
+            'wave', 'orbit', 'flower', 'geometric', 'starburst'
+        ];
         
-        // Configuration
-        const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFBE0B', '#FB5607', '#8338EC', '#3A86FF', '#FF006E', '#A5DD9B', '#F9C74F'];
-        const musicFiles = ['track1.mp3', 'track2.mp3', 'track3.mp3', 'track4.mp3', 'track5.mp3','track6.mp3', 'track7.mp3', 'track8.mp3', 'track9.mp3', 'track10.mp3',];
-        
-        // State variables
+        let colorIndex = 0;
+        let currentAnimation = 0;
+        let animationInterval;
+        const button = document.querySelector('.main-button');
+        const pointsElement = document.querySelector('.points');
+        const motivationElement = document.querySelector('.motivation-line');
+        const shareButton = document.querySelector('.share-button');
+        const volumeSlider = document.querySelector('.volume-slider');
+        const muteButton = document.querySelector('.mute-button');
         let startTime;
         let timerInterval;
-        let currentDuration = 0;
-        
-        // Initialize
-        let currentColor = colors[0];
-        updateColorScheme();
-        
-        // Event Listeners
-        mainButton.addEventListener('mousedown', startSession);
-        mainButton.addEventListener('touchstart', startSession);
-        mainButton.addEventListener('mouseup', endSession);
-        mainButton.addEventListener('touchend', endSession);
-        shareBtn.addEventListener('click', shareOnWhatsApp);
-        
-        // Functions
-        function startSession() {
-            // Start timer
-            startTime = new Date();
-            timerInterval = setInterval(updateTimer, 100);
-            
-            // Change UI
-            mainButton.textContent = "Release to Stop";
-            mainButton.style.backgroundColor = currentColor;
-            shareSection.style.display = 'none';
-            
-            // Play random music
-            playRandomMusic();
-            
-            // Change background animation
-            updateColorScheme();
-        }
-        
-        function endSession() {
-            // Stop timer
-            clearInterval(timerInterval);
-            const endTime = new Date();
-            currentDuration = Math.floor((endTime - startTime) / 1000);
-            
-            // Change UI
-            mainButton.textContent = "Press & Hold";
-            mainButton.style.backgroundColor = '#ff6b6b';
-            
-            // Stop music
-            fadeOutAudio();
-            
-            // Show share button if session was > 2 seconds
-            if (currentDuration >= 2) {
-                shareSection.style.display = 'block';
+        let currentAudio;
+        let totalPoints = 0;
+        let isMuted = false;
+        let previousVolume = 0.5;
+
+        // Initialize with random color
+        colorIndex = Math.floor(Math.random() * colors.length);
+        button.style.background = colors[colorIndex];
+        document.body.style.background = `linear-gradient(-45deg, ${colors[colorIndex]}, ${colors[(colorIndex+5)%10]})`;
+
+        button.addEventListener('mousedown', startExperience);
+        button.addEventListener('touchstart', startExperience);
+        button.addEventListener('mouseup', stopExperience);
+        button.addEventListener('touchend', stopExperience);
+
+        volumeSlider.addEventListener('input', (e) => {
+            if(currentAudio) currentAudio.volume = e.target.value;
+            if(isMuted) toggleMute();
+        });
+
+        function toggleMute() {
+            isMuted = !isMuted;
+            if(currentAudio) {
+                if(isMuted) {
+                    previousVolume = currentAudio.volume;
+                    currentAudio.volume = 0;
+                    muteButton.textContent = '🔇';
+                } else {
+                    currentAudio.volume = previousVolume;
+                    volumeSlider.value = previousVolume;
+                    muteButton.textContent = '🔊';
+                }
             }
         }
-        
-        function updateTimer() {
-            const currentTime = new Date();
-            const seconds = Math.floor((currentTime - startTime) / 1000);
-            const mins = Math.floor(seconds / 60).toString().padStart(2, '0');
-            const secs = (seconds % 60).toString().padStart(2, '0');
-            timerDisplay.textContent = `${mins}:${secs}`;
+
+        function getRandomMotivation() {
+            return motivationalPhrases[Math.floor(Math.random() * motivationalPhrases.length)];
         }
-        
-        function playRandomMusic() {
-            // Select random music and color
-            const randomMusicIndex = Math.floor(Math.random() * musicFiles.length);
-            const randomColorIndex = Math.floor(Math.random() * colors.length);
+
+        function createParticle(animationType) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.cssText = `
+                left: ${Math.random() * 100}%;
+                top: ${Math.random() * 100}%;
+                width: ${10 + Math.random() * 20}px;
+                height: ${10 + Math.random() * 20}px;
+                background: ${colors[colorIndex]};
+                border-radius: ${animationType === 'geometric' ? '0' : '50%'};
+            `;
+
+            const animationDuration = 2 + Math.random() * 3;
             
-            currentColor = colors[randomColorIndex];
-            audioPlayer.src = `${musicFiles[randomMusicIndex]}`;
-            audioPlayer.volume = 0.9;
-            audioPlayer.loop = true;
-            audioPlayer.play().catch(e => console.log("Playback error:", e));
-            
-            updateColorScheme();
+            switch(animationType) {
+                case 'raindrop':
+                    particle.style.animation = `raindrop ${animationDuration}s linear`;
+                    break;
+                case 'bubble':
+                    particle.style.animation = `bubble ${animationDuration}s ease-in`;
+                    break;
+                case 'spiral':
+                    particle.style.animation = `spiral ${animationDuration}s linear`;
+                    break;
+                case 'circle-expand':
+                    particle.style.animation = `circle-expand ${animationDuration}s ease-out`;
+                    break;
+                case 'sparkle':
+                    particle.style.width = '5px';
+                    particle.style.height = '5px';
+                    particle.style.animation = `sparkle ${animationDuration}s ease-out`;
+                    break;
+                case 'wave':
+                    particle.style.borderRadius = '0';
+                    particle.style.animation = `wave ${animationDuration}s ease-out`;
+                    break;
+                case 'orbit':
+                    particle.style.animation = `orbit ${animationDuration}s linear infinite`;
+                    break;
+                case 'flower':
+                    particle.style.animation = `flower ${animationDuration}s ease-in-out`;
+                    break;
+                case 'geometric':
+                    particle.style.borderRadius = '0';
+                    particle.style.animation = `geometric ${animationDuration}s ease-in-out`;
+                    break;
+                case 'starburst':
+                    particle.style.animation = `starburst ${animationDuration}s linear`;
+                    break;
+            }
+
+            document.body.appendChild(particle);
+            setTimeout(() => particle.remove(), animationDuration * 1000);
         }
-        
-        function fadeOutAudio() {
-            const fadeInterval = setInterval(() => {
-                if (audioPlayer.volume > 0.1) {
-                    audioPlayer.volume -= 0.1;
-                } else {
-                    audioPlayer.pause();
-                    audioPlayer.currentTime = 0;
-                    audioPlayer.volume = 0.7;
-                    clearInterval(fadeInterval);
-                }
+
+        function startExperience(e) {
+            e.preventDefault();
+            if (e.type === 'touchstart') document.body.style.overflow = 'hidden';
+            
+            motivationElement.textContent = getRandomMotivation();
+            shareButton.classList.remove('visible');
+            totalPoints = 0;
+            pointsElement.classList.add('visible');
+            pointsElement.textContent = "0 Points";
+            colorIndex = (colorIndex + 1) % colors.length;
+            currentAnimation = Math.floor(Math.random() * animations.length);
+            button.style.background = colors[colorIndex];
+            
+            button.style.animation = 'pulse 1.5s infinite';
+            document.body.style.background = `linear-gradient(-45deg, ${colors[colorIndex]}, ${colors[(colorIndex+5)%10]})`;
+            document.body.style.animation = 'gradient 15s ease infinite';
+            
+            button.querySelector('.button-text').textContent = 'Release to Stop';
+            
+            startTime = Date.now();
+            timerInterval = requestAnimationFrame(updatePoints);
+            
+            animationInterval = setInterval(() => {
+                createParticle(animations[currentAnimation]);
             }, 100);
+            
+            const trackNumber = Math.floor(Math.random() * 10) + 1;
+			currentAudio = new Audio(`track${trackNumber}.mp3`); // Modified path
+			currentAudio.volume = isMuted ? 0 : volumeSlider.value;
+			currentAudio.loop = true;
+			currentAudio.play();
         }
-        
-        function updateColorScheme() {
-            body.style.background = `${currentColor}20`;
-            bgAnimation.style.color = currentColor;
+
+        function stopExperience() {
+            clearInterval(animationInterval);
+            button.style.animation = '';
+            document.body.style.animation = '';
+            document.body.style.background = '#1a1a1a';
+            
+            button.querySelector('.button-text').textContent = 'Press & Hold to Sigh Away';
+            
+            cancelAnimationFrame(timerInterval);
+            
+            if (currentAudio) {
+                currentAudio.pause();
+                currentAudio.currentTime = 0;
+            }
+            
+            pointsElement.classList.add('celebrate');
+            setTimeout(() => {
+                pointsElement.classList.remove('celebrate');
+            }, 1000);
+            
+            shareButton.classList.add('visible');
+            motivationElement.textContent = "Great job! Ready for another round?";
+            
+            if (document.body.style.overflow === 'hidden') {
+                document.body.style.overflow = '';
+            }
         }
-        
-        function shareOnWhatsApp() {
-            const message = `I just relaxed for ${currentDuration} seconds with Stress Buster! Can you beat my time?`;
-            const url = encodeURIComponent(window.location.href);
-            const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}%20${url}`;
-            window.open(whatsappUrl, '_blank');
+
+        function updatePoints() {
+            const elapsed = Date.now() - startTime;
+            totalPoints = elapsed;
+            pointsElement.textContent = `${totalPoints.toLocaleString()} Points`;
+            timerInterval = requestAnimationFrame(updatePoints);
+        }
+
+        function shareScore() {
+            const message = encodeURIComponent(
+                `🧘♂️ Can you beat my relaxation score of ${totalPoints.toLocaleString()} points?\n\nChallenge yourself ➡️ [WEBSITE_URL]`
+            );
+            window.open(`https://wa.me/?text=${message}`, '_blank');
         }
     </script>
 </body>
