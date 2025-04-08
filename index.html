@@ -389,8 +389,6 @@
             
             const trackNumber = Math.floor(Math.random() * 10) + 1;
 			currentAudio = new Audio(`track${trackNumber}.mp3`); // Modified path
-		alert("hi");
-		alert(trackNumber);
 			currentAudio.volume = isMuted ? 0 : volumeSlider.value;
 			currentAudio.loop = true;
 			currentAudio.play();
@@ -433,7 +431,7 @@
 
         function shareScore() {
             const message = encodeURIComponent(
-                `🧘♂️ Can you beat my relaxation score of ${totalPoints.toLocaleString()} points?\n\nChallenge yourself ➡️ [WEBSITE_URL]`
+                `Can you beat my relaxation score of ${totalPoints.toLocaleString()} points?\n\nChallenge yourself [https://codingbitskolkata.github.io/SighAway/]`
             );
             window.open(`https://wa.me/?text=${message}`, '_blank');
         }
